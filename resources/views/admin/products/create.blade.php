@@ -11,7 +11,7 @@
         </div>
         <div>
             <div>
-                {!! Form::open(['action' => 'ProductsController@store', 'method' => 'POST']) !!}
+                {!! Form::open(['action' => 'ProductsController@store', 'method' => 'POST', 'files' => TRUE]) !!}
                 {{ Form::bsSelect('category', $categoryOptions) }}
                 {{ Form::bsText('name', '', ['placeholder' => 'Product name']) }}
                 {{ Form::bsTextArea('description', '', ['placeholder' => 'Product description']) }}

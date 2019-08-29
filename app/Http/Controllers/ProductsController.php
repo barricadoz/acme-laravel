@@ -57,21 +57,30 @@ class ProductsController extends Controller
     {
         $this->validate($request, [
             'name' => 'required',
-            'category' => 'required|not_in:0'
+            'description' => 'required',
+            'price' => 'required|numeric',
+            'quantity' => 'required|numeric',
+            'image' => 'required|mimes:jpeg, gif, png',
+            'category' => 'required|not_in:0',
         ]);
 
-        $file = $request->input('image');
+        $file = $request->file('image');
+        $fileExt = $file->getClientOriginalExtension();
+        $fileDestination = '/public/images/products';
+        $fileName = slug($request->input('name')) . '.' . $fileExt;
+        $file->move('..' . $fileDestination, $fileName);
 
         $product = new Product();
         $product->name = $request->input('name');
         $product->description = $request->input('description');
         $product->price = $request->input('price');
         $product->quantity = $request->input('quantity');
+        $product->image_path = $fileDestination . '/' . $fileName;
         $product->category_id = $request->input('category');
 
         $product->save();
 
-        return redirect('/admin/product')->with('success', 'Product added');
+        return redirect('/admin/product')->with('success', 'Product created');
     }
 
     /**
