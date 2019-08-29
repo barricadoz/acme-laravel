@@ -1,0 +1,8 @@
+.idea
+.env
+.DS_Store
+vendor
+node_modules
+bower_components
+bootstrap/cache
+public/images
