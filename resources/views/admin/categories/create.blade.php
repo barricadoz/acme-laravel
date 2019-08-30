@@ -12,7 +12,7 @@
         <div>
             <div>
                 {!! Form::open(['action' => 'CategoriesController@store', 'method' => 'POST']) !!}
-                {{ Form::bsText('name', '', ['placehoder' => 'Category name']) }}
+                {{ Form::bsText('name', '', ['placeholder' => 'Category name']) }}
                 {{ Form::bsSubmit('Submit', ['class' => 'btn btn-primary']) }}
                 {!! Form::close() !!}
             </div>

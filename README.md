@@ -10,6 +10,8 @@
 
 `php artisan make:controller CartController`
 
+`php artisan make:controller CheckoutController`
+
 `php artisan make:model Category -m`
 
 `php artisan make:model Order -m`

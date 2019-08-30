@@ -13,6 +13,10 @@
                         <td>{{ $product->description }}</td>
                         <td>{{ $product->price }}</td>
                         <td>
+                            {!! Form::open(['action' => 'CartController@addItem', 'method' => 'POST']) !!}
+                            {{ Form::hidden('product_id', $product->id) }}
+                            {{ Form::bsSubmit('Buy', ['class' => 'btn btn-primary']) }}
+                            {!! Form::close() !!}
 {{--                            <form method="post" action="/basket">--}}
 {{--                                <input type="hidden" name="token" value="{{ \App\Classes\CSRFToken::_token() }}">--}}
 {{--                                <input type="hidden" name="product_id" value="{{ $product->id }}">--}}
