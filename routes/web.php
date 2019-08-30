@@ -28,7 +28,7 @@ Route::get('/product/{id}', 'ProductsController@show')->name('product_show');
 Route::get('/basket', 'CartController@show', 'cart_view');
 Route::post('/basket', 'CartController@addItem', 'cart_add_item');
 Route::post('/basket/remove', 'CartController@removeItem', 'cart_remove_item');
-Route::post('/basket/update', 'CartController@update', 'cart_update');
+Route::post('/basket/update', 'CartController@updateItem', 'cart_update');
 
 Route::get('/checkout', 'CheckoutController@checkout', 'checkout');
 Route::get('/checkout/confirm-order', 'CheckoutController@confirmOrder', 'checkout_confirm');

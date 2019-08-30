@@ -11,27 +11,26 @@
                         <td>
                             <span>{{ $item['quantity'] }}</span>
                             @if ($item['stock'] - $item['quantity'] > 0)
-                                <button class="update-quantity update-quantity-plus"
-                                        style="cursor: pointer; color: #00a000"
-                                        data-id="{{ $item['id'] }}" data-operator="+"
-                                        data-token="">
-                                    <i class="fa fa-plus-square" aria-hidden="true"></i>
-                                </button>
+                                {!! Form::open(['action' => 'CartController@updateItem', 'method' => 'POST']) !!}
+                                {{ Form::hidden('product_id', $item['id']) }}
+                                {{ Form::hidden('operation', 'increment') }}
+                                {{ Form::bsSubmit('+', ['class' => 'btn btn-primary']) }}
+                                {!! Form::close() !!}
                             @endif
                             @if ($item['quantity'] > 1)
-                                <button class="update-quantity update-quantity-minus"
-                                        style="cursor: pointer; color: #a00000" data-id="{{ $item['id'] }}"
-                                        data-operator="-" data-token="">
-                                    <i class="fa fa-minus-square" aria-hidden="true"></i>
-                                </button>
+                                {!! Form::open(['action' => 'CartController@updateItem', 'method' => 'POST']) !!}
+                                {{ Form::hidden('product_id', $item['id']) }}
+                                {{ Form::hidden('operation', 'decrement') }}
+                                {{ Form::bsSubmit('-', ['class' => 'btn btn-primary']) }}
+                                {!! Form::close() !!}
                             @endif
                         </td>
                         <td>{{ $item['total'] }}</td>
                         <td>
-                            <button class="cart-remove-item" style="cursor: pointer" data-id="{{ $item['id'] }}"
-                                    data-token="">
-                                <i class="fa fa-times" aria-hidden="true"></i>
-                            </button>
+                            {!! Form::open(['action' => 'CartController@removeItem', 'method' => 'POST']) !!}
+                            {{ Form::hidden('product_id', $item['id']) }}
+                            {{ Form::bsSubmit('Remove', ['class' => 'btn btn-primary']) }}
+                            {!! Form::close() !!}
                         </td>
                     </tr>
                 @endforeach

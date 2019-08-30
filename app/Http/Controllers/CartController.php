@@ -10,8 +10,8 @@ use Illuminate\Support\Facades\Session;
 class CartController extends Controller
 {
     private $emptyCartMessage = 'Your basket is currently empty';
-    private $itemAddedMessage = 'Item added to your basket';
-    private $itemRemovedMessage = 'Item removed from your basket';
+    private $itemRemovedMessage = 'The item has been removed from your basket';
+    private $itemNotAddedMessage = 'Sorry - a problem occurred. The item could not be added to your basket';
 
     public function show() {
         try {
@@ -63,15 +63,20 @@ class CartController extends Controller
     }
 
     public function addItem(Request $request) {
-        Cart::add($request);
-        return redirect('/products')->with('success', $this->itemAddedMessage);
+        $response = Cart::add($request->product_id);
+        if (!empty($response)) {
+            return redirect('/products')->with('success', $response);
+        }
+
+        return redirect('/products')->with('warning', $this->itemNotAddedMessage);
     }
 
-    public function removeItem() {
-
+    public function removeItem(Request $request) {
+        Cart::remove($request->product_id);
+        return redirect('/basket')->with('success', $this->itemRemovedMessage);
     }
 
-    public function update() {
+    public function updateItem(Request $request) {
 
     }
 }
