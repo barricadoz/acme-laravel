@@ -10,8 +10,9 @@ use Illuminate\Support\Facades\Session;
 class CartController extends Controller
 {
     private $emptyCartMessage = 'Your basket is currently empty';
+    private $itemAddedMessage = 'The item has been added to your basket';
     private $itemRemovedMessage = 'The item has been removed from your basket';
-    private $itemNotAddedMessage = 'Sorry - a problem occurred. The item could not be added to your basket';
+    private $itemUpdatedMessage = 'Your basket has been updated.';
 
     public function show() {
         try {
@@ -19,7 +20,7 @@ class CartController extends Controller
             $cartTotal = 0;
 
             if (!Session::has('user_cart') || count(Session::get('user_cart')) < 1) {
-                return view('purchase.cart')->with('success', $this->emptyCartMessage);
+                return view('purchase.cart')->with('info', $this->emptyCartMessage);
             }
 
             $index = 0;
@@ -63,12 +64,8 @@ class CartController extends Controller
     }
 
     public function addItem(Request $request) {
-        $response = Cart::add($request->product_id);
-        if (!empty($response)) {
-            return redirect('/products')->with('success', $response);
-        }
-
-        return redirect('/products')->with('warning', $this->itemNotAddedMessage);
+        Cart::add($request->product_id);
+        return redirect('/products')->with('success', $this->itemAddedMessage);
     }
 
     public function removeItem(Request $request) {
@@ -77,6 +74,7 @@ class CartController extends Controller
     }
 
     public function updateItem(Request $request) {
-
+        $update = Cart::update($request->product_id, $request->operation);
+        return redirect('/basket')->with('success', $this->itemUpdatedMessage);
     }
 }

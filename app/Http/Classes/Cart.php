@@ -7,7 +7,6 @@ namespace App\Http\Classes;
 use Illuminate\Support\Facades\Session;
 
 class Cart {
-    private $itemAddedMessage = 'Item added to your basket';
 
     public static function add($productId) {
         $ItemIsInCart = FALSE;
@@ -29,10 +28,12 @@ class Cart {
                     $index++;
                     foreach ($cartItems as $key => $value) {
                         if ($key === 'product_id' && $value === $productId) {
-                            array_splice($userCart, $index - 1, 1, array([
-                                'product_id' => $productId,
-                                'quantity' => $cartItems['quantity'] + 1,
-                            ]));
+                            array_splice($userCart, $index - 1, 1, [
+                                [
+                                    'product_id' => $productId,
+                                    'quantity' => $cartItems['quantity'] + 1,
+                                ],
+                            ]);
                             $ItemIsInCart = TRUE;
                         }
                     }
@@ -47,23 +48,22 @@ class Cart {
 
                 Session::put('user_cart', $userCart);
             }
-
-            $object = new static();
-            return $object->itemAddedMessage;
-        }
-        catch (\Exception $exception) {
+        } catch (\Exception $exception) {
             echo $exception->getMessage();
         }
     }
 
-    public static function remove($index) {
+    public static function remove($productId) {
         if (count(Session::get('user_cart')) <= 1) {
             self::clear();
         }
         else {
             $userCart = Session::get('user_cart');
-            unset($userCart[$index]);
-            sort($userCart);
+            foreach ($userCart as $key => $product) {
+                if ($product['product_id'] === $productId) {
+                    unset($userCart[$key]);
+                }
+            }
 
             Session::put('user_cart', $userCart);
         }
@@ -71,5 +71,27 @@ class Cart {
 
     public static function clear() {
         Session::forget('user_cart');
+    }
+
+    public static function update($productId, $operation) {
+        $userCart = Session::get('user_cart');
+
+        foreach ($userCart as $key => $product) {
+            if ($product['product_id'] === $productId) {
+                $quantity = $userCart[$key]['quantity'];
+
+                switch ($operation) {
+                    case 'increment':
+                        $quantity++;
+                        break;
+                    case 'decrement':
+                        $quantity--;
+                        break;
+                }
+
+                $userCart[$key]['quantity'] = $quantity;
+            }
+        }
+        Session::put('user_cart', $userCart);
     }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Category;
 use App\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 
 class ProductsController extends Controller
 {
@@ -19,9 +20,20 @@ class ProductsController extends Controller
         $productsByCategory = [];
 
         foreach ($products as $product) {
+            $product->cartQuantity = 0;
             $category = $product->category->name;
             if (!array_key_exists($category, $productsByCategory)) {
                 $productsByCategory[$category] = [];
+            }
+
+            if (Session::has('user_cart')) {
+                $cart = Session::get('user_cart');
+
+                foreach ($cart as $cart_item) {
+                    if ((int) $cart_item['product_id'] === $product->id) {
+                        $product->cartQuantity = $cart_item['quantity'];
+                    }
+                }
             }
 
             $productsByCategory[$category][] = $product;
