@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Product;
+use App\Order;
+use App\OrderDetail;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 
 class CheckoutController extends Controller
@@ -68,9 +71,9 @@ class CheckoutController extends Controller
           'status' => 'Payment pending',
         ];
 
-        if (isAuthenticated()) {
-          $user = user();
-          $orderInfo['user_id'] = $user->id;
+        if (Auth::check()) {
+          $user = Auth::id();
+          $orderInfo['user_id'] = $user;
         }
 
         $order = Order::create($orderInfo);
