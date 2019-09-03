@@ -1,6 +1,5 @@
 @extends('layouts.app')
 @section('title', 'Add Product')
-@section('data-page-id', 'adminAddProduct')
 
 @section('content')
     <div class="category">
@@ -12,7 +11,8 @@
         <div>
             <div>
                 {!! Form::open(['action' => 'ProductsController@store', 'method' => 'POST', 'files' => TRUE]) !!}
-                {{ Form::bsSelect('category', $categoryOptions) }}
+                {!! Form::label('category', 'Category') !!}
+                {!! Form::select('category', $categoryOptions) !!}
                 {{ Form::bsText('name', '', ['placeholder' => 'Product name']) }}
                 {{ Form::bsTextArea('description', '', ['placeholder' => 'Product description']) }}
                 {{ Form::bsText('price', '', ['placeholder' => 'Price']) }}
