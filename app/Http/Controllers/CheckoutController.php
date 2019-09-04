@@ -10,6 +10,7 @@ use Illuminate\Foundation\Auth\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
+use Stripe\Customer;
 use Stripe\Stripe;
 
 class CheckoutController extends Controller {
@@ -140,10 +141,15 @@ class CheckoutController extends Controller {
         $session = \Stripe\Checkout\Session::create([
             'payment_method_types' => ['card'],
             'line_items' => $stripeLineItems,
-            'success_url' => getenv('APP_URL') . $this->successPath,
-            'cancel_url' => getenv('APP_URL') . $this->failurePath,
+//            'success_url' => getenv('APP_URL') . $this->successPath,
+//            'cancel_url' => getenv('APP_URL') . $this->failurePath,
+            'success_url' => 'https://aab56b22.ngrok.io' . $this->successPath,
+            'cancel_url' => 'https://aab56b22.ngrok.io' . $this->failurePath,
             'client_reference_id' => $orderNumber,
         ]);
+
+        $stripeSession = $session->__get('id');
+        $stripeKey = $this->publishableKey;
 
         return view('purchase.checkout')->with([
             'stripeSession' => $session->__get('id'),
@@ -161,8 +167,10 @@ class CheckoutController extends Controller {
             $object = $event_json->data->object;
             $orderNumber = $object->client_reference_id;
 
+            Stripe::setApiKey($this->secretKey);
+
             // Get the customer email from Stripe.
-            $customer = \Stripe\Customer::retrieve($object->customer);
+            $customer = Customer::retrieve($object->customer);
             $customerEmail = $customer->email;
 
             if ($event_json->type === $this->stripeCheckoutCompleteLabel) {

@@ -21,7 +21,7 @@ RUN echo 'xdebug.remote_handler=dbgp' >> /usr/local/etc/php/php.ini
 RUN echo 'xdebug.remote_enable=1' >> /usr/local/etc/php/php.ini
 # Set remote_host to IP address of host machine.
 # RUN echo 'xdebug.remote_host=192.168.4.131' >> /usr/local/etc/php/php.ini
-RUN echo 'xdebug.remote_host=192.168.3.106' >> /usr/local/etc/php/php.ini
+RUN echo 'xdebug.remote_host=192.168.2.88' >> /usr/local/etc/php/php.ini
 RUN echo 'xdebug.remote_port=9000' >> /usr/local/etc/php/php.ini
 RUN echo 'xdebug.max_nesting_level=300' >> /usr/local/etc/php/php.ini
 RUN echo 'xdebug.remote_autostart=1' >> /usr/local/etc/php/php.ini
